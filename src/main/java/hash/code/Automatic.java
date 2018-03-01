@@ -20,7 +20,7 @@ class Automatic {
   private int bonus;
   private int[][] grid;
   private List<Ride> rides = new ArrayList<>();
-  private Node[] cars;
+  private Car[] cars;
   private Map<Integer, List<String>> result = new HashMap<>();
 
   Automatic(String filepath) throws IOException {
@@ -36,11 +36,7 @@ class Automatic {
           this.bonus = Integer.parseInt(parts[3]);
           this.simulationSteps = Integer.parseInt(parts[4]);
           this.grid = new int[x][y];
-          this.cars = new Node[z];
-
-          for (int i = 0; i < z; i++) {
-            this.cars[i] = new Node(0, 0);
-          }
+          this.cars = new Car[z];
 
           lineNumber++;
           continue;
@@ -65,24 +61,20 @@ class Automatic {
 
     int index = 0;
     int step = 0;
-    while(!viable.isEmpty()) {
-      if (index < cars.length) {
-        if (result.containsKey(index)) {
-          result.get(index).add(viable.remove(0).getIndex());
-        } else {
-          List<String> assigned = new ArrayList<>();
-          assigned.add(viable.remove(0).getIndex());
-          result.put(index, assigned);
-        }
+
+    while(index < cars.length && !viable.isEmpty()) {
+      if (result.containsKey(index)) {
+        result.get(index).add(viable.remove(0).getIndex());
+      } else {
+        List<String> assigned = new ArrayList<>();
+        assigned.add(viable.remove(0).getIndex());
+        result.put(index, assigned);
       }
       index++;
-      if (index > cars.length) {
-        index = 0;
-      }
-      step++;
-      if (step > simulationSteps) {
-        break;
-      }
+    }
+
+    while(step < simulationSteps && !viable.isEmpty()) {
+
     }
 
   }

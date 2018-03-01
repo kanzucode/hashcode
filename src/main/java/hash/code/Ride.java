@@ -52,8 +52,16 @@ public class Ride {
     return index;
   }
 
+  Integer distance() {
+    return (finish.x - start.x) + (finish.y - start.y);
+  }
+
   Integer score() {
-    return min + (finish.x - start.x) + (finish.y - start.y);
+    return min + distance();
+  }
+
+  Integer initialLocation() {
+    return start.x + start.y;
   }
 
   boolean viable() {
