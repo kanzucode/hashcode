@@ -6,9 +6,9 @@ public class Ride {
   private Node finish;
   private int min;
   private int max;
-  private final int index;
+  private final String index;
 
-  Ride(int index, Node start, Node finish, int min, int max) {
+  Ride(String index, Node start, Node finish, int min, int max) {
     this.start = start;
     this.finish = finish;
     this.min = min;
@@ -48,7 +48,7 @@ public class Ride {
     this.max = max;
   }
 
-  public int getIndex() {
+  public String getIndex() {
     return index;
   }
 

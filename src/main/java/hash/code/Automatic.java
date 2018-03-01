@@ -3,9 +3,15 @@ package hash.code;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 class Automatic {
@@ -15,6 +21,7 @@ class Automatic {
   private int[][] grid;
   private List<Ride> rides = new ArrayList<>();
   private Node[] cars;
+  private Map<Integer, List<String>> result = new HashMap<>();
 
   Automatic(String filepath) throws IOException {
     try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
@@ -46,7 +53,7 @@ class Automatic {
         int s = Integer.parseInt(parts[4]);
         int f = Integer.parseInt(parts[5]);
 
-        rides.add(new Ride(lineNumber, new Node(x1, y1), new Node(x2, y2), s, f));
+        rides.add(new Ride(String.valueOf(lineNumber -1), new Node(x1, y1), new Node(x2, y2), s, f));
 
         lineNumber++;
       }
@@ -59,12 +66,36 @@ class Automatic {
     int index = 0;
     while(!viable.isEmpty()) {
       if (index < cars.length) {
-
+        if (result.containsKey(index)) {
+          result.get(index).add(viable.remove(0).getIndex());
+        } else {
+          List<String> assigned = new ArrayList<>();
+          assigned.add(viable.remove(0).getIndex());
+          result.put(index, assigned);
+        }
+      }
+      index++;
+      if (index > cars.length) {
+        index = 0;
       }
     }
 
-    for (int i = 0; i < simulationSteps; i++) {
+  }
 
-    }
+  void print(String filename) throws IOException {
+    Path path = Paths.get(filename);
+    Files.deleteIfExists(path);
+    result.forEach((k,v) -> {
+      String assigned = String.join(" ", v);
+      try {
+        if (Files.exists(path)) {
+          Files.write(path, String.format("%d %s\n", v.size(), assigned).getBytes(), StandardOpenOption.APPEND);
+        } else {
+          Files.write(path, String.format("%d %s\n", v.size(), assigned).getBytes());
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    });
   }
 }

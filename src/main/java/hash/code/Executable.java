@@ -8,11 +8,11 @@ public class Executable {
 
   public static void main(String[] args) {
     List<String> files = new ArrayList<>();
-    files.add("/tmp/a_example.in");
-    files.add("/tmp/b_should_be_easy.in");
-    files.add("/tmp/c_no_hurry.in");
-    files.add("/tmp/d_metropolis.in");
-    files.add("/tmp/e_high_bonus.in");
+    files.add("/home/wasibas/submission/a_example.in");
+    files.add("/home/wasibas/submission/b_should_be_easy.in");
+    files.add("/home/wasibas/submission/c_no_hurry.in");
+    files.add("/home/wasibas/submission/d_metropolis.in");
+    files.add("/home/wasibas/submission/e_high_bonus.in");
 
     System.out.println("And so it begins...");
     try {
@@ -20,7 +20,7 @@ public class Executable {
         System.out.println("Processing " + file);
         Automatic simulation = new Automatic(file);
         simulation.process();
-        //simulation.print(file + ".out");
+        simulation.print(file + ".out");
         System.out.println("Completed " + file);
       }
     } catch (IOException e) {
