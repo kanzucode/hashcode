@@ -8,15 +8,19 @@ public class Executable {
 
   public static void main(String[] args) {
     List<String> files = new ArrayList<>();
-    files.add("example.in");
+    files.add("/tmp/a_example.in");
+    files.add("/tmp/b_should_be_easy.in");
+    files.add("/tmp/c_no_hurry.in");
+    files.add("/tmp/d_metropolis.in");
+    files.add("/tmp/e_high_bonus.in");
 
     System.out.println("And so it begins...");
     try {
       for (String file : files) {
         System.out.println("Processing " + file);
-        PizzaCutter cutter = new PizzaCutter(file);
-        cutter.process();
-        cutter.print();
+        Automatic simulation = new Automatic(file);
+        simulation.process();
+        //simulation.print(file + ".out");
         System.out.println("Completed " + file);
       }
     } catch (IOException e) {
