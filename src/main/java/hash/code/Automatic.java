@@ -64,6 +64,7 @@ class Automatic {
     List<Ride> viable = rides.stream().filter(Ride::viable).sorted(Comparator.comparing(Ride::score)).collect(Collectors.toList());
 
     int index = 0;
+    int step = 0;
     while(!viable.isEmpty()) {
       if (index < cars.length) {
         if (result.containsKey(index)) {
@@ -78,13 +79,16 @@ class Automatic {
       if (index > cars.length) {
         index = 0;
       }
+      step++;
+      if (step > simulationSteps) {
+        break;
+      }
     }
 
   }
 
-  void print(String filename) throws IOException {
+  void print(String filename) {
     Path path = Paths.get(filename);
-    Files.deleteIfExists(path);
     result.forEach((k,v) -> {
       String assigned = String.join(" ", v);
       try {
