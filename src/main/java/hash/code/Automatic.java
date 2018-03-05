@@ -3,6 +3,7 @@ package hash.code;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +25,8 @@ class Automatic {
   private Map<Integer, List<String>> result = new HashMap<>();
 
   Automatic(String filepath) throws IOException {
-    try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+    ClassLoader loader = Automatic.class.getClassLoader();
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(loader.getResourceAsStream(filepath)))) {
       String line;
       int lineNumber = 0;
       while ((line = reader.readLine()) != null) {
@@ -38,6 +40,10 @@ class Automatic {
           this.grid = new int[x][y];
           this.cars = new Car[z];
 
+          for (int i = 0; i < z; i++) {
+            this.cars[i] = new Car();
+          }
+
           lineNumber++;
           continue;
         }
@@ -49,7 +55,7 @@ class Automatic {
         int s = Integer.parseInt(parts[4]);
         int f = Integer.parseInt(parts[5]);
 
-        rides.add(new Ride(String.valueOf(lineNumber -1), new Node(x1, y1), new Node(x2, y2), s, f));
+        rides.add(new Ride(String.valueOf(lineNumber - 1), new Node(x1, y1), new Node(x2, y2), s, f));
 
         lineNumber++;
       }
@@ -60,28 +66,29 @@ class Automatic {
     List<Ride> viable = rides.stream().filter(Ride::viable).sorted(Comparator.comparing(Ride::score)).collect(Collectors.toList());
 
     int index = 0;
-    int step = 0;
 
-    while(index < cars.length && !viable.isEmpty()) {
-      if (result.containsKey(index)) {
-        result.get(index).add(viable.remove(0).getIndex());
-      } else {
-        List<String> assigned = new ArrayList<>();
-        assigned.add(viable.remove(0).getIndex());
-        result.put(index, assigned);
+    while (!viable.isEmpty()) {
+      if (index < cars.length) {
+        if (result.containsKey(index)) {
+          result.get(index).add(viable.remove(0).getIndex());
+        } else {
+          List<String> assigned = new ArrayList<>();
+          assigned.add(viable.remove(0).getIndex());
+          result.put(index, assigned);
+        }
       }
       index++;
-    }
-
-    while(step < simulationSteps && !viable.isEmpty()) {
-
+      if (index > cars.length) {
+        index = 0;
+      }
     }
 
   }
 
-  void print(String filename) {
+  void print(String filename) throws IOException {
     Path path = Paths.get(filename);
-    result.forEach((k,v) -> {
+    Files.deleteIfExists(path);
+    result.forEach((k, v) -> {
       String assigned = String.join(" ", v);
       try {
         if (Files.exists(path)) {

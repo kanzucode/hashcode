@@ -8,11 +8,11 @@ public class Executable {
 
   public static void main(String[] args) {
     List<String> files = new ArrayList<>();
-    files.add("/home/wasibas/submission/a_example.in");
-    files.add("/home/wasibas/submission/b_should_be_easy.in");
-    files.add("/home/wasibas/submission/c_no_hurry.in");
-    files.add("/home/wasibas/submission/d_metropolis.in");
-    files.add("/home/wasibas/submission/e_high_bonus.in");
+    files.add("a_example.in");
+    files.add("b_should_be_easy.in");
+    files.add("c_no_hurry.in");
+    files.add("d_metropolis.in");
+    files.add("e_high_bonus.in");
 
     System.out.println("And so it begins...");
     try {
